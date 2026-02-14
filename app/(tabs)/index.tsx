@@ -34,23 +34,40 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>หน้าแรก</Text>
+      <Text style={styles.title}>📦 รายการสินค้า</Text>
 
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListEmptyComponent={
+          <Text style={styles.empty}>ยังไม่มีข้อมูล</Text>
+        }
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text>รุ่น: {item.brand}</Text>
-            <Text>สี: {item.size}</Text>
-            <Text style={styles.status}>สถานะ: {item.status}</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>รุ่น</Text>
+              <Text style={styles.value}>{item.brand}</Text>
+            </View>
 
-            {/* ปุ่มลบมุมขวาล่าง */}
+            <View style={styles.row}>
+              <Text style={styles.label}>สี</Text>
+              <Text style={styles.value}>{item.size}</Text>
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.label}>สถานะ</Text>
+              <Text style={styles.status}>{item.status}</Text>
+            </View>
+
             <Pressable
-              style={styles.deleteBtn}
+              style={({ pressed }) => [
+                styles.deleteBtn,
+                { opacity: pressed ? 0.7 : 1 },
+              ]}
               onPress={() => deleteItem(item.id)}
             >
-              <Text style={{ color: "#fff" }}>ลบ</Text>
+              <Text style={styles.deleteText}>ลบ</Text>
             </Pressable>
           </View>
         )}
@@ -60,22 +77,60 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 12 },
-  card: {
-    borderWidth: 1,
-    padding: 12,
-    marginBottom: 12,
-    position: "relative",
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#F4F6F8",
   },
-  status: { marginTop: 4, color: "red" },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  empty: {
+    textAlign: "center",
+    marginTop: 40,
+    color: "#999",
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 14,
+    elevation: 3, // android shadow
+    shadowColor: "#000", // ios shadow
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 6,
+  },
+  label: {
+    fontWeight: "600",
+    color: "#555",
+  },
+  value: {
+    color: "#333",
+  },
+  status: {
+    color: "#E53935",
+    fontWeight: "600",
+  },
   deleteBtn: {
     position: "absolute",
-    right: 8,
-    bottom: 8,
-    backgroundColor: "red",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 4,
+    right: 12,
+    bottom: 12,
+    backgroundColor: "#E53935",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  deleteText: {
+    color: "#fff",
+    fontWeight: "600",
   },
 })
